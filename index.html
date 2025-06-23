@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика Telegram Бота</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="img/logo.svg" alt="Logo">
+        </div>
+        <nav>
+            <a href="#" class="active">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor"/>
+                </svg>
+                Обзор
+            </a>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <header>
+            <h1>Обзор</h1>
+            <div class="header-right">
+                <button class="refresh-btn">Обновить данные</button>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Активные подписки</h3>
+                <div class="stat-value" id="active-subscriptions">0</div>
+                <div class="stat-change positive">+0% с прошлого месяца</div>
+            </div>
+            <div class="stat-card">
+                <h3>Продленные подписки</h3>
+                <div class="stat-value" id="renewed-subscriptions">0</div>
+                <div class="stat-change positive">+0% с прошлого месяца</div>
+            </div>
+            <div class="stat-card">
+                <h3>Истекшие подписки</h3>
+                <div class="stat-value" id="expired-subscriptions">0</div>
+                <div class="stat-change negative">+0% с прошлого месяца</div>
+            </div>
+        </div>
+
+        <div class="tables-section">
+            <div class="table-container">
+                <h2>Пользователи с активными подписками</h2>
+                <table id="active-users-table">
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>Имя пользователя</th>
+                            <th>Дата активации</th>
+                            <th>Дата истечения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h2>Пользователи с истекшими подписками</h2>
+                <table id="expired-users-table">
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>Имя пользователя</th>
+                            <th>Дата истечения</th>
+                            <th>Дней после истечения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html> 
