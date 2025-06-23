@@ -9,8 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadDashboardData() {
     try {
         const response = await fetch('/api/dashboard-data');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
         updateStatistics(data.statistics);
         updateActiveUsersTable(data.activeUsers);
         updateExpiredUsersTable(data.expiredUsers);
@@ -21,12 +28,12 @@ async function loadDashboardData() {
 }
 
 function updateStatistics(statistics) {
-    document.getElementById('active-subscriptions').textContent = statistics.activeSubscriptions;
-    document.getElementById('renewed-subscriptions').textContent = statistics.renewedSubscriptions;
-    document.getElementById('expired-subscriptions').textContent = statistics.expiredSubscriptions;
+    document.getElementById('active-subscriptions').textContent = statistics.activeSubscriptions || 0;
+    document.getElementById('renewed-subscriptions').textContent = statistics.renewedSubscriptions || 0;
+    document.getElementById('expired-subscriptions').textContent = statistics.expiredSubscriptions || 0;
 }
 
-function updateActiveUsersTable(users) {
+function updateActiveUsersTable(users = []) {
     const tbody = document.querySelector('#active-users-table tbody');
     tbody.innerHTML = '';
 
@@ -40,9 +47,15 @@ function updateActiveUsersTable(users) {
         `;
         tbody.appendChild(row);
     });
+
+    if (users.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = '<td colspan="4" class="text-center">Нет активных подписок</td>';
+        tbody.appendChild(row);
+    }
 }
 
-function updateExpiredUsersTable(users) {
+function updateExpiredUsersTable(users = []) {
     const tbody = document.querySelector('#expired-users-table tbody');
     tbody.innerHTML = '';
 
@@ -56,9 +69,16 @@ function updateExpiredUsersTable(users) {
         `;
         tbody.appendChild(row);
     });
+
+    if (users.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = '<td colspan="4" class="text-center">Нет истекших подписок</td>';
+        tbody.appendChild(row);
+    }
 }
 
 function formatDate(dateString) {
+    if (!dateString) return '-';
     const date = new Date(dateString);
     return date.toLocaleDateString('ru-RU', {
         day: '2-digit',
@@ -68,6 +88,7 @@ function formatDate(dateString) {
 }
 
 function calculateDaysSinceExpiration(expirationDate) {
+    if (!expirationDate) return '-';
     const today = new Date();
     const expDate = new Date(expirationDate);
     const diffTime = Math.abs(today - expDate);

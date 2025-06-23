@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 import mysql.connector
 from datetime import datetime
 import os
@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__, static_folder='.')
+app = Flask(__name__)
 
 # Конфигурация базы данных
 db_config = {
@@ -19,9 +19,13 @@ db_config = {
 def get_db_connection():
     return mysql.connector.connect(**db_config)
 
-@app.route('/')
-def index():
-    return send_from_directory('.', 'index.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(f"../public/{path}"):
+        return send_from_directory('../public', path)
+    else:
+        return send_from_directory('../public', 'index.html')
 
 @app.route('/api/dashboard-data')
 def get_dashboard_data():
@@ -92,4 +96,4 @@ def get_dashboard_data():
         return jsonify({'error': 'Internal Server Error'}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000) 
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000))) 
