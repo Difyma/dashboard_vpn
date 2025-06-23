@@ -2,14 +2,26 @@
     "version": 2,
     "builds": [
         {
-            "src": "server.py",
+            "src": "api/server.py",
             "use": "@vercel/python"
+        },
+        {
+            "src": "public/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
         {
+            "src": "/favicon.ico",
+            "dest": "/public/favicon/favicon.ico"
+        },
+        {
+            "src": "/favicon/(.*)",
+            "dest": "/public/favicon/$1"
+        },
+        {
             "src": "/(.*)",
-            "dest": "server.py"
+            "dest": "/api/server.py"
         }
     ],
     "env": {

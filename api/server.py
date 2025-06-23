@@ -19,10 +19,16 @@ db_config = {
 def get_db_connection():
     return mysql.connector.connect(**db_config)
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('../public/favicon', 'favicon.ico')
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
-    if path != "" and os.path.exists(f"../public/{path}"):
+    if path.startswith('favicon/'):
+        return send_from_directory('../public', path)
+    elif path and os.path.exists(os.path.join('../public', path)):
         return send_from_directory('../public', path)
     else:
         return send_from_directory('../public', 'index.html')
